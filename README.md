@@ -27,5 +27,8 @@ A high-performance productivity ecosystem built to streamline engineering workfl
 
 To get a local copy up and running on your machine, follow these simple steps:
 
-
-git clone https://github.com/GautamSingh13/Productivity-Dashboard.git
+1. **Clone the repo**:
+   ```bash
+   git clone https://github.com/GautamSingh13/Productivity-Dashboard.git
+2. **Open the project**:
+   Navigate into the folder and open index.html in your preferred browser (Chrome, Brave, etc.) to view the live dashboard.   
