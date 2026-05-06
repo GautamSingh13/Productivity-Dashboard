@@ -360,5 +360,273 @@ theme.addEventListener('click',function(){
 })
 }
 changetheme()
+// ===================================================================================================================
+
+/* ============================================================
+   DAILY GOALS - FINAL REFINED LOGIC
+   ============================================================ */
 
 
+function dailygoals(){
+       // 1. Enhanced Image Mapping
+       const dgImageMap = {
+
+    running: {
+
+        keywords: ["run", "running", "jog", "jogging", "sprint", "marathon", "treadmill"],
+
+        url: "https://images.unsplash.com/photo-1530143311094-34d807799e8f?w=500&q=80"
+
+    },
+
+    fitness: {
+
+        keywords: ["gym", "workout", "exercise", "lifting", "training", "fitness", "muscle", "bench", "strength"],
+
+        url: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=500&q=80"
+
+    },
+
+    walking: {
+
+        keywords: ["walk", "walking", "steps", "stroll", "outside", "treadmill"],
+
+        url: "https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?w=500&q=80"
+
+    },
+
+    eating: {
+
+        keywords: ["eat", "food", "healthy", "meal", "breakfast", "lunch", "dinner", "protein", "diet"],
+
+        url: "https://images.unsplash.com/photo-1547592166-23ac45744acd?w=500&q=80"
+
+    },
+
+    coding: {
+
+        keywords: ["code", "programming", "javascript", "python", "web", "dev", "software", "java", "leetcode", "dsa","code forces"],
+
+        url: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=500&q=80"
+
+    },
+
+    reading: {
+
+        keywords: ["read", "book", "library", "novel", "literature", "kindle", "story"],
+
+        url: "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=500&q=80"
+
+    },
+
+    water: {
+
+        keywords: ["water", "hydrate", "drink"],
+
+        url: "https://images.unsplash.com/photo-1548839140-29a749e1cf4d?w=500&q=80"
+
+    },
+
+    bathing: {
+        keywords: ["bath", "bathing", "shower", "freshen up", "fresh", "grooming", "hygiene", "soap", "wash"],
+        url: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=500&q=80"
+    },
+
+    meditation: {
+
+        keywords: ["meditate", "yoga", "peace", "zen", "mindfulness", "breath", "mental health"],
+
+        url: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=500&q=80"
+
+    },
+
+    study: {
+
+        keywords: ["study", "exam", "college", "school", "homework", "learn", "course", "lecture","classes"],
+
+        url: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=500&q=80"
+
+    },
+
+    cleaning: {
+
+        keywords: ["clean", "tidy", "laundry", "dishes", "organize", "chore", "room"],
+
+        url: "https://images.unsplash.com/photo-1581578731548-c64695cc6958?w=500&q=80"
+
+    },
+
+    sleep: {
+
+        keywords: ["sleep", "rest", "bed", "nap", "early"],
+
+        url: "https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?w=500&q=80"
+
+    },
+
+    finance: {
+
+        keywords: ["money", "save", "budget", "finance", "invest", "bill", "bank"],
+
+        url: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=500&q=80"
+
+    },
+
+    productivity: {
+
+        keywords: ["work", "focus", "office", "meeting", "email", "tasks", "deadline"],
+
+        url: "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=500&q=80"
+
+    },
+
+    hobbies: {
+
+        keywords: ["game", "play", "music", "guitar", "art", "paint", "draw", "hobby"],
+
+        url: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=500&q=80"
+
+    },
+
+    social: {
+
+        keywords: ["call", "meet", "friend", "family", "social", "party", "talk"],
+
+        url: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=500&q=80"
+
+    },
+
+    shopping: {
+
+        keywords: ["buy", "shop", "grocery", "order", "store"],
+
+        url: "https://images.unsplash.com/photo-1542838132-92c53300491e?w=500&q=80"
+
+    }
+
+};
+
+// 2. State Management
+let dgGoalCount = 0;
+let dgTotalPoints = 0;
+let dgDecisionsMade = 0;
+let currentDayIndex = new Date().getDay(); // Initialized to today
+
+// 3. DOM Elements
+const dgSetGoalBtn = document.querySelector("#dg-set-goal-btn");
+const dgGoalInput = document.querySelector("#dg-goal-input");
+const dgCardsContainer = document.querySelector("#dg-cards-container");
+const dgScoreDisplay = document.querySelector("#dg-current-score");
+
+// 4. Helper: Image Matching Logic
+const getGoalImage = (userInput) => {
+    const text = userInput.toLowerCase();
+    const words = text.split(/\s+/);
+
+    for (const category in dgImageMap) {
+        const keywords = dgImageMap[category].keywords;
+        const isMatch = keywords.some(k => text === k || words.includes(k) || text.includes(k));
+        if (isMatch) return dgImageMap[category].url;
+    }
+    return "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=500&q=80"; // Default
+};
+
+// 5. Update Weekly Grid (Heatmap Logic)
+const updateWeeklyGrid = (dayIndex) => {
+    const days = document.querySelectorAll('.dg-day');
+    if (dayIndex >= 0 && dayIndex < days.length) {
+        const activeDay = days[dayIndex];
+        
+        // Clean previous states
+        activeDay.classList.remove('lvl-20', 'lvl-40', 'lvl-60', 'lvl-80', 'lvl-100');
+
+        // Apply new heatmap level based on points achieved
+        if (dgTotalPoints >= 100)      activeDay.classList.add('lvl-100');
+        else if (dgTotalPoints >= 80) activeDay.classList.add('lvl-80');
+        else if (dgTotalPoints >= 60) activeDay.classList.add('lvl-60');
+        else if (dgTotalPoints >= 40) activeDay.classList.add('lvl-40');
+        else if (dgTotalPoints >= 20) activeDay.classList.add('lvl-20');
+        
+        console.log(`Grid index ${dayIndex} updated. Score: ${dgTotalPoints}`);
+    }
+};
+
+// 6. Handle Batch Completion
+const finalizeDecision = () => {
+    dgDecisionsMade++;
+
+    if (dgDecisionsMade === 5) {
+        updateWeeklyGrid(currentDayIndex);
+
+        setTimeout(() => {
+            // UI & State Reset
+            dgCardsContainer.innerHTML = "";
+            dgGoalCount = 0;
+            dgDecisionsMade = 0;
+            dgTotalPoints = 0;
+            dgScoreDisplay.innerText = "0";
+            
+            // Advance Day Index (Loops 0-6)
+            currentDayIndex = (currentDayIndex + 1) % 7; 
+            
+            alert("Daily batch complete! Tracker updated.");
+        }, 800);
+    }
+};
+
+// 7. Event Listener: Goal Creation
+dgSetGoalBtn.addEventListener("click", () => {
+    const goalValue = dgGoalInput.value.trim();
+
+    if (goalValue !== "" && dgGoalCount < 5) {
+        dgGoalCount++;
+        const imageUrl = getGoalImage(goalValue);
+        
+        const card = document.createElement("div");
+        card.classList.add("dg-card");
+        card.innerHTML = `
+            <div class="dg-card-img-container">
+                <img src="${imageUrl}" alt="${goalValue}">
+            </div>
+            <div class="dg-card-content">
+                <h3>${goalValue}</h3>
+                <div class="dg-btn-group">
+                    <button class="dg-achieve-btn">Achieve</button>
+                    <button class="dg-postpone-btn">Postpone</button>
+                </div>
+            </div>
+        `;
+
+        dgCardsContainer.appendChild(card);
+        dgGoalInput.value = "";
+
+        const achieveBtn = card.querySelector(".dg-achieve-btn");
+        const postponeBtn = card.querySelector(".dg-postpone-btn");
+
+        // Logic for "Achieve"
+        achieveBtn.addEventListener("click", () => {
+            achieveBtn.classList.add("dg-completed");
+            achieveBtn.innerText = "Done";
+            postponeBtn.style.display = "none";
+            
+            dgTotalPoints += 20;
+            dgScoreDisplay.innerText = dgTotalPoints;
+            
+            finalizeDecision();
+        });
+
+        // Logic for "Postpone"
+        postponeBtn.addEventListener("click", () => {
+            postponeBtn.classList.add("dg-postponed");
+            postponeBtn.innerText = "Later";
+            achieveBtn.style.display = "none";
+            
+            finalizeDecision();
+        });
+
+    } else if (dgGoalCount >= 5) {
+        alert("Daily limit reached! Finish your current set first.");
+    }
+});
+}
+dailygoals()

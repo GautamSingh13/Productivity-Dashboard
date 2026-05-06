@@ -128,9 +128,42 @@
             </div>
         </section>
         <section class="fullelem daily-goals-fullpage">
-            <button class="back" id = "4"><i class="ri-arrow-left-long-line"></i></button>
+        <button class="back" id="4"><i class="ri-arrow-left-long-line"></i></button>
+    
+    <!-- Unique ID for the wrapper -->
+        <div id="dg-wrapper">
+        <div class="dg-header">
             <h1>Daily Goals</h1>
-        </section>  
+            <p>Set up to 5 goals. Each achievement earns you 20 points!</p>
+        </div>
+
+        <div class="dg-input-container">
+            <input type="text" id="dg-goal-input" placeholder="Type your goal here...">
+            <button id="dg-set-goal-btn">Set Goal</button>
+        </div>
+
+        <!-- Where the cards will live -->
+        <div id="dg-cards-container"></div>
+
+        <div class="dg-score-board">
+    <!-- Changed 'Productivity Score' to 'Points Earned' -->
+         <h2>Today's Points: <span id="dg-current-score">0</span> / 100</h2>
+        </div>
+        <div class="dg-weekly-tracker">
+    <h3>Are you Consistent? Look at your weekly consistency!</h3>
+    <div class="dg-grid" id="dg-weekly-grid">
+    <div class="dg-day" data-day="0">S</div> <!-- Sunday -->
+    <div class="dg-day" data-day="1">M</div> <!-- Monday -->
+    <div class="dg-day" data-day="2">T</div> <!-- Tuesday -->
+    <div class="dg-day" data-day="3">W</div> <!-- Wednesday -->
+    <div class="dg-day" data-day="4">T</div> <!-- Thursday -->
+    <div class="dg-day" data-day="5">F</div> <!-- Friday -->
+    <div class="dg-day" data-day="6">S</div> <!-- Saturday -->
+</div>
+</div>
+    </div>
+        </section>
+         
         
      </div>
    <script src="script.js"></script>
